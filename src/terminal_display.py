@@ -26,6 +26,10 @@ class TerminalDisplay:
             curses.curs_set(0)
         except curses.error:
             pass
+        # Terminal escape code to ensure hardware cursor is invisible (supported across all terminals)
+        sys.stdout.write("\033[?25l")
+        sys.stdout.flush()
+
         stdscr.leaveok(True)
         stdscr.nodelay(True)
         stdscr.timeout(120)
@@ -33,14 +37,19 @@ class TerminalDisplay:
         # Clear once at start
         stdscr.clear()
 
-        while self._session.status == GameStatus.RUNNING:
-            key = stdscr.getch()
-            self._handle_input(key)
-            self._session.tick()
-            self._draw(stdscr)
+        try:
+            while self._session.status == GameStatus.RUNNING:
+                key = stdscr.getch()
+                self._handle_input(key)
+                self._session.tick()
+                self._draw(stdscr)
 
-        if self._session.status == GameStatus.GAME_OVER:
-            self._show_game_over(stdscr)
+            if self._session.status == GameStatus.GAME_OVER:
+                self._show_game_over(stdscr)
+        finally:
+            # Re-enable cursor when game exits
+            sys.stdout.write("\033[?25h")
+            sys.stdout.flush()
 
     def _handle_input(self, key: int) -> None:
         if key in (ord("q"), ord("Q"), 27):
