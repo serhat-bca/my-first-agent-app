@@ -26,8 +26,12 @@ class TerminalDisplay:
             curses.curs_set(0)
         except curses.error:
             pass
+        stdscr.leaveok(True)
         stdscr.nodelay(True)
         stdscr.timeout(120)
+
+        # Clear once at start
+        stdscr.clear()
 
         while self._session.status == GameStatus.RUNNING:
             key = stdscr.getch()
@@ -51,7 +55,6 @@ class TerminalDisplay:
             self._session.change_direction(Direction.RIGHT)
 
     def _draw(self, stdscr: curses.window) -> None:
-        stdscr.erase()
         board = self._session.board
         max_y, max_x = stdscr.getmaxyx()
 
@@ -59,14 +62,17 @@ class TerminalDisplay:
         needed_width = board.width + 4
         if max_y < needed_height or max_x < needed_width:
             stdscr.addstr(0, 0, "Terminal window too small!")
+            stdscr.clrtoeol()
             stdscr.refresh()
             return
 
         title = f" SNAKE | Score: {self._session.score} | Controls: WASD/Arrows, Q to quit "
         stdscr.addstr(0, 0, title)
+        stdscr.clrtoeol()
 
         # Draw top wall
         stdscr.addstr(1, 0, "+" + "-" * board.width + "+")
+        stdscr.clrtoeol()
 
         # Draw board content
         food = self._session.food
@@ -88,9 +94,11 @@ class TerminalDisplay:
                     line_chars.append(" ")
             line_chars.append("|")
             stdscr.addstr(row + 2, 0, "".join(line_chars))
+            stdscr.clrtoeol()
 
         # Draw bottom wall
         stdscr.addstr(board.height + 2, 0, "+" + "-" * board.width + "+")
+        stdscr.clrtoeol()
         stdscr.refresh()
 
     def _show_game_over(self, stdscr: curses.window) -> None:
