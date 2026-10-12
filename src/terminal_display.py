@@ -22,7 +22,10 @@ class TerminalDisplay:
             print("Run directly in your terminal: python -m src")
 
     def _render_loop(self, stdscr: curses.window) -> None:
-        curses.curs_set(0)
+        try:
+            curses.curs_set(0)
+        except curses.error:
+            pass
         stdscr.nodelay(True)
         stdscr.timeout(120)
 
