@@ -17,12 +17,13 @@ The default language is Python 3 with the standard library only, so nothing need
 
 ## How work flows here
 
-1. Before writing code, read `tests/scenarios/`. If no scenario covers the request, write one with the person first (skill: `.agents/skills/write-scenarios/`).
-2. Create a branch for every change. Never commit to `main`.
-3. Build in `src/`. Read `src/AGENTS.md` and `conventions.md` first.
-4. Write tests in `tests/` that prove each scenario.
-5. Run `make check`. Fix what fails.
-6. Open a pull request (skill: `.agents/skills/open-pull-request/`). Do not merge it yourself.
+1. We work as a dual-agent team: the Primary Builder pairs with the person on features in `src/`, while the dedicated Test Engineer (`.agents/skills/test-engineer/`) focuses on `tests/`, `tests/scenarios/`, and verification.
+2. Before writing code, read `tests/scenarios/`. If no scenario covers the request, write one with the person first (skill: `.agents/skills/write-scenarios/`).
+3. Create a branch for every change. Never commit to `main`.
+4. Build in `src/`. Read `src/AGENTS.md` and `conventions.md` first.
+5. Write tests in `tests/` that prove each scenario.
+6. Run `make check`. Fix what fails.
+7. Open a pull request (skill: `.agents/skills/open-pull-request/`). Do not merge it yourself.
 
 ## Rules
 
